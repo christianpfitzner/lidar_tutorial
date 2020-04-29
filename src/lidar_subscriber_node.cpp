@@ -21,7 +21,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <visualization_msgs/Marker.h>
 
-// std cpp includes
+// std cpp includes (optional, depending on your solution for the closest distance)
 #include <algorithm>
 #include <vector>
 
@@ -35,28 +35,17 @@ ros::Publisher vis_pub;
 void lidarCallback(const sensor_msgs::LaserScan::ConstPtr scan)
 {
   // calculate here the Cartesian point which is closest to the scanners origin
-
   ROS_INFO_STREAM("***********"); 
   ROS_INFO_STREAM("Frame id: " << scan->header.frame_id); 
 
 
 
-
-
-  const auto closest_idx = std::min_element(scan->ranges.begin(), scan->ranges.end());
-  const auto idx         = std::distance(scan->ranges.begin(), closest_idx);
-  const auto angle       = scan->angle_min + scan->angle_increment*idx; 
-
-
-  ROS_INFO_STREAM("closest idx: "      << idx);
-  ROS_INFO_STREAM("closest distance: "        << scan->ranges[idx]);
-  ROS_INFO_STREAM("angle for closest point: " << angle); 
-
-  const auto x = scan->ranges[idx] * cos(angle); 
-  const auto y = scan->ranges[idx] * sin(angle); 
-
+  const auto x = 0.0; 
+  const auto y = 0.0; 
 
   ROS_INFO_STREAM("closest point with coordinates (x, y): " << x << ", " << y); 
+
+
 
 
 
