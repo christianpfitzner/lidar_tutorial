@@ -40,8 +40,18 @@ void lidarCallback(const sensor_msgs::LaserScan::ConstPtr scan)
 
 
 
-  const auto x = 0.0; 
-  const auto y = 0.0; 
+  const auto closest_idx = std::min_element(scan->ranges.begin(), scan->ranges.end());	
+  const auto idx         = std::distance(scan->ranges.begin(), closest_idx);	
+  const auto angle       = scan->angle_min + scan->angle_increment*idx; 	
+
+  ROS_INFO_STREAM("closest idx: "      << idx);	
+  ROS_INFO_STREAM("closest distance: "        << scan->ranges[idx]);	
+  ROS_INFO_STREAM("angle for closest point: " << angle); 	
+
+  const auto x = scan->ranges[idx] * cos(angle); 	
+  const auto y = scan->ranges[idx] * sin(angle); 
+  
+
 
   ROS_INFO_STREAM("closest point with coordinates (x, y): " << x << ", " << y); 
 
@@ -64,18 +74,18 @@ void lidarCallback(const sensor_msgs::LaserScan::ConstPtr scan)
   marker.pose.orientation.y = 0.0;
   marker.pose.orientation.z = 0.0;
   marker.pose.orientation.w = 1.0;
-  marker.scale.x            = 0.1;
-  marker.scale.y            = 0.1;
-  marker.scale.z            = 0.1;
+  marker.scale.x            = 0.2;
+  marker.scale.y            = 0.2;
+  marker.scale.z            = 0.2;
   marker.color.a            = 1.0;                                 // Don't forget to set the alpha!
-  marker.color.r            = 1.0;
-  marker.color.g            = 0.0;
+  marker.color.r            = 0.0;
+  marker.color.g            = 1.0;
   marker.color.b            = 0.0;
 
 
 
   // hier müssen Sie noch das Versenden des Markers über den bestehenden Publisher einfügen. 
-
+  vis_pub.publish(marker);
 
 }
 
